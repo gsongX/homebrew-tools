@@ -12,7 +12,7 @@ class Pyqwt < Formula
   depends_on "gsong2014/sdr/pyqt@5.12"
 
   # Patch to build system to allow for specific installation directories.
-  patch :p0, :DATA
+  # patch :p0, :DATA
 
   def install
     ["python2", "python3"].each do |python|
@@ -35,49 +35,49 @@ class Pyqwt < Formula
   end
 end
 
-__END__
---- configure/configure.py  2011-10-24 19:14:41.000000000 -0500
-+++ configure/configure.py  2011-10-24 19:15:03.000000000 -0500
-@@ -846,14 +846,14 @@
-     pattern = os.path.join(os.pardir, 'sip', options.qwt, 'common', '*.sip')
-     sip_files += [os.path.join(os.pardir, f) for f in glob.glob(pattern)]
-     installs.append(
--        [sip_files, os.path.join(configuration.pyqt_sip_dir, 'Qwt5')])
-+        [sip_files, os.path.join(options.sip_install_path, 'Qwt5')])
+# __END__
+# --- configure/configure.py  2011-10-24 19:14:41.000000000 -0500
+# +++ configure/configure.py  2011-10-24 19:15:03.000000000 -0500
+# @@ -846,14 +846,14 @@
+#      pattern = os.path.join(os.pardir, 'sip', options.qwt, 'common', '*.sip')
+#      sip_files += [os.path.join(os.pardir, f) for f in glob.glob(pattern)]
+#      installs.append(
+# -        [sip_files, os.path.join(configuration.pyqt_sip_dir, 'Qwt5')])
+# +        [sip_files, os.path.join(options.sip_install_path, 'Qwt5')])
 
-     # designer
-     if configuration.qt_version > 0x03ffff:
-         plugin_source_path = os.path.join(
-             os.pardir, 'qt4lib', 'PyQt4', 'uic', 'widget-plugins')
-         plugin_install_path = os.path.join(
--            configuration.pyqt_mod_dir, 'uic', 'widget-plugins')
-+            options.uic_install_path, 'uic', 'widget-plugins')
-         compileall.compile_dir(plugin_source_path, ddir=plugin_install_path)
-         pattern = os.path.join(plugin_source_path, '*.py*')
-         plugin_files = [os.path.join(os.pardir, f) for f in glob.glob(pattern)]
-@@ -1025,6 +1025,14 @@
-         '--module-install-path', default='', action='store',
-         help= 'specify the install directory for the Python modules'
-         )
-+    install_options.add_option(
-+        '--sip-install-path', default='', action='store',
-+        help= 'specify the install directory for the sip files [share/sip]'
-+        )
-+    install_options.add_option(
-+        '--uic-install-path', default='', action='store',
-+        help= 'specify the install directory for the uic plugins [lib/python/PyQt4]'
-+        )
-     parser.add_option_group(install_options)
+#      # designer
+#      if configuration.qt_version > 0x03ffff:
+#          plugin_source_path = os.path.join(
+#              os.pardir, 'qt4lib', 'PyQt4', 'uic', 'widget-plugins')
+#          plugin_install_path = os.path.join(
+# -            configuration.pyqt_mod_dir, 'uic', 'widget-plugins')
+# +            options.uic_install_path, 'uic', 'widget-plugins')
+#          compileall.compile_dir(plugin_source_path, ddir=plugin_install_path)
+#          pattern = os.path.join(plugin_source_path, '*.py*')
+#          plugin_files = [os.path.join(os.pardir, f) for f in glob.glob(pattern)]
+# @@ -1025,6 +1025,14 @@
+#          '--module-install-path', default='', action='store',
+#          help= 'specify the install directory for the Python modules'
+#          )
+# +    install_options.add_option(
+# +        '--sip-install-path', default='', action='store',
+# +        help= 'specify the install directory for the sip files [share/sip]'
+# +        )
+# +    install_options.add_option(
+# +        '--uic-install-path', default='', action='store',
+# +        help= 'specify the install directory for the uic plugins [lib/python/PyQt4]'
+# +        )
+#      parser.add_option_group(install_options)
 
-     options, args =  parser.parse_args()
-@@ -1084,6 +1092,10 @@
-     if not options.module_install_path:
-         options.module_install_path = os.path.join(
-             configuration.pyqt_mod_dir, 'Qwt5')
-+    if not options.sip_install_path:
-+        options.sip_install_path = configuration.pyqt_sip_dir
-+    if not options.uic_install_path:
-+        options.uic_install_path = configuration.pyqt_mod_dir
+#      options, args =  parser.parse_args()
+# @@ -1084,6 +1092,10 @@
+#      if not options.module_install_path:
+#          options.module_install_path = os.path.join(
+#              configuration.pyqt_mod_dir, 'Qwt5')
+# +    if not options.sip_install_path:
+# +        options.sip_install_path = configuration.pyqt_sip_dir
+# +    if not options.uic_install_path:
+# +        options.uic_install_path = configuration.pyqt_mod_dir
 
-     print
-     print 'Extended command line options:'
+#      print
+#      print 'Extended command line options:'
