@@ -1,4 +1,4 @@
-sidneys.github.io Homebrew Tap
+Homebrew Tap
 -------------------
 
 Install the tap with:
