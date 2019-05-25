@@ -62,13 +62,6 @@ class PyqtAT512 < Formula
               "--qml-plugindir=#{pkgshare}/plugins",
               "--verbose",
               "--sip=#{Formula["sip@4.19"].opt_bin}/sip",
-              #  ERROR: Unknown module(s) in QT
-              "--disable=QtWebKit",
-              "--disable=QtWebKitWidgets",
-              "--disable=QAxContainer",
-              "--disable=QtX11Extras",
-              "--disable=QtWinExtras",
-              "--disable=Enginio",
               "--no-dist-info"]
               
       args << "--debug" if build.with? "debug"
