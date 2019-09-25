@@ -21,8 +21,8 @@ end
 class SipAT419 < Formula
   desc "Tool to create Python bindings for C and C++ libraries"
   homepage "https://www.riverbankcomputing.com/software/sip/intro"
-  url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.17/sip-4.19.17.tar.gz"
-  sha256 "12bcd8f4d5feefc105bc075d12c5090ee783f7380728563c91b8b95d0ec45df3"
+  url "https://www.riverbankcomputing.com/static/Downloads/sip/4.19.19/sip-4.19.19.tar.gz"
+  sha256 "5436b61a78f48c7e8078e93a6b59453ad33780f80c644e5f3af39f94be1ede44"
   
   revision 1
   

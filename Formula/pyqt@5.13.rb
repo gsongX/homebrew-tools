@@ -18,11 +18,11 @@ class Unlinked < Requirement
 end
 
 
-class PyqtAT512 < Formula
+class PyqtAT513 < Formula
   desc "Python bindings for v5 of Qt"
   homepage "https://www.riverbankcomputing.com/software/pyqt/download5"
-  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.12.2/PyQt5_gpl-5.12.2.tar.gz"
-  sha256 "c565829e77dc9c281aa1a0cdf2eddaead4e0f844cbaf7a4408441967f03f5f0f"
+  url "https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.13.1/PyQt5_gpl-5.13.1.tar.gz"
+  sha256 "54b7f456341b89eeb3930e786837762ea67f235e886512496c4152ebe106d4af"
 
   revision 1
 
