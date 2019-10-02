@@ -14,10 +14,6 @@ class Ffmpeg < Formula
   option "with-libvidstab", "Enable vid.stab support for video stabilization"
   option "with-openh264", "Enable OpenH264 library"
   option "with-openssl", "Enable SSL support"
-  option "with-rubberband", "Enable rubberband library"
-  option "with-webp", "Enable using libwebp to encode WEBP images"
-  option "with-zeromq", "Enable using libzeromq to receive commands sent through a libzeromq client"
-  option "with-zimg", "Enable z.lib zimg library"
   option "with-srt", "Enable SRT library"
   option "with-libvmaf", "Enable libvmaf scoring library"
 
@@ -47,11 +43,15 @@ class Ffmpeg < Formula
   depends_on "speex"
   depends_on "openjpeg"
   depends_on "rtmpdump"
+  depends_on "libbluray"
+  depends_on "rubberband"
+  depends_on "webp"
+  depends_on "zeromq"
+  depends_on "zimg"
 
   depends_on "chromaprint" => :optional
   depends_on "fdk-aac" => :optional
   depends_on "game-music-emu" => :optional
-  depends_on "libbluray" => :optional
   depends_on "libbs2b" => :optional
   depends_on "libcaca" => :optional
   depends_on "libgsm" => :optional
@@ -63,14 +63,10 @@ class Ffmpeg < Formula
   depends_on "opencore-amr"
   depends_on "openh264" => :optional
   depends_on "openssl" => :optional
-  depends_on "rubberband" => :optional
   depends_on "srt" => :optional
   depends_on "tesseract" => :optional
   depends_on "two-lame" => :optional
   depends_on "wavpack" => :optional
-  depends_on "webp" => :optional
-  depends_on "zeromq" => :optional
-  depends_on "zimg" => :optional
 
   def install
     args = %W[
@@ -107,10 +103,14 @@ class Ffmpeg < Formula
       --disable-indev=jack
       --enable-libaom
       --enable-libsoxr
+      --enable-libbluray
+      --enable-librubberband
+      --enable-libwebp
+      --enable-libzimg
+      --enable-libzmq
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
-    args << "--enable-libbluray" if build.with? "libbluray"
     args << "--enable-libbs2b" if build.with? "libbs2b"
     args << "--enable-libcaca" if build.with? "libcaca"
     args << "--enable-libfdk-aac" if build.with? "fdk-aac"
@@ -119,7 +119,6 @@ class Ffmpeg < Formula
     args << "--enable-libmodplug" if build.with? "libmodplug"
     args << "--enable-libopenh264" if build.with? "openh264"
     args << "--enable-librsvg" if build.with? "librsvg"
-    args << "--enable-librubberband" if build.with? "rubberband"
     args << "--enable-libsrt" if build.with? "srt"
     args << "--enable-libssh" if build.with? "libssh"
     args << "--enable-libtesseract" if build.with? "tesseract"
@@ -127,9 +126,6 @@ class Ffmpeg < Formula
     args << "--enable-libvidstab" if build.with? "libvidstab"
     args << "--enable-libvmaf" if build.with? "libvmaf"
     args << "--enable-libwavpack" if build.with? "wavpack"
-    args << "--enable-libwebp" if build.with? "webp"
-    args << "--enable-libzimg" if build.with? "zimg"
-    args << "--enable-libzmq" if build.with? "zeromq"
     args << "--enable-opencl" if MacOS.version > :lion
     args << "--enable-openssl" if build.with? "openssl"
     args << "--enable-videotoolbox" if MacOS.version >= :mountain_lion
