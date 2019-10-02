@@ -129,7 +129,6 @@ class Ffmpeg < Formula
     args << "--enable-libvmaf" if build.with? "libvmaf"
     args << "--enable-libwavpack" if build.with? "wavpack"
     args << "--enable-opencl" if MacOS.version > :lion
-    args << "--enable-openssl" if build.with? "openssl"
     args << "--enable-videotoolbox" if MacOS.version >= :mountain_lion
 
     if build.with? "openjpeg"
