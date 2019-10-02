@@ -116,6 +116,7 @@ class Ffmpeg < Formula
       --enable-encoder=h264_videotoolbox
       --enable-decoder=h264_vda
       --enable-encoder=h264_vaapi
+      --enable-nonfree
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
