@@ -8,16 +8,13 @@ class Ffmpeg < Formula
 
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
   option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
-  option "with-librsvg", "Enable SVG files as inputs via librsvg"
   option "with-libssh", "Enable SFTP protocol via libssh"
-  option "with-tesseract", "Enable the tesseract OCR engine"
   option "with-libvidstab", "Enable vid.stab support for video stabilization"
   option "with-openh264", "Enable OpenH264 library"
   option "with-openssl", "Enable SSL support"
   option "with-srt", "Enable SRT library"
   option "with-libvmaf", "Enable libvmaf scoring library"
 
-  deprecated_option "with-libtesseract" => "with-tesseract"
 
   depends_on "nasm" => :build
   depends_on "pkg-config" => :build
@@ -48,23 +45,23 @@ class Ffmpeg < Formula
   depends_on "webp"
   depends_on "zeromq"
   depends_on "zimg"
+  depends_on "libbs2b"
+  depends_on "libcaca"
+  depends_on "libgsm"
+  depends_on "libmodplug"
+  depends_on "librsvg"
+  depends_on "tesseract"
+  depends_on "opencore-amr"
 
   depends_on "chromaprint" => :optional
   depends_on "fdk-aac" => :optional
   depends_on "game-music-emu" => :optional
-  depends_on "libbs2b" => :optional
-  depends_on "libcaca" => :optional
-  depends_on "libgsm" => :optional
-  depends_on "libmodplug" => :optional
-  depends_on "librsvg" => :optional
   depends_on "libssh" => :optional
   depends_on "libvidstab" => :optional
   depends_on "libvmaf" => :optional
-  depends_on "opencore-amr"
   depends_on "openh264" => :optional
   depends_on "openssl" => :optional
   depends_on "srt" => :optional
-  depends_on "tesseract" => :optional
   depends_on "two-lame" => :optional
   depends_on "wavpack" => :optional
 
@@ -108,20 +105,20 @@ class Ffmpeg < Formula
       --enable-libwebp
       --enable-libzimg
       --enable-libzmq
+      --enable-libgsm
+      --enable-libbs2b
+      --enable-libcaca
+      --enable-libmodplug
+      --enable-librsvg
+      --enable-libtesseract
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
-    args << "--enable-libbs2b" if build.with? "libbs2b"
-    args << "--enable-libcaca" if build.with? "libcaca"
     args << "--enable-libfdk-aac" if build.with? "fdk-aac"
     args << "--enable-libgme" if build.with? "game-music-emu"
-    args << "--enable-libgsm" if build.with? "libgsm"
-    args << "--enable-libmodplug" if build.with? "libmodplug"
     args << "--enable-libopenh264" if build.with? "openh264"
-    args << "--enable-librsvg" if build.with? "librsvg"
     args << "--enable-libsrt" if build.with? "srt"
     args << "--enable-libssh" if build.with? "libssh"
-    args << "--enable-libtesseract" if build.with? "tesseract"
     args << "--enable-libtwolame" if build.with? "two-lame"
     args << "--enable-libvidstab" if build.with? "libvidstab"
     args << "--enable-libvmaf" if build.with? "libvmaf"
