@@ -9,7 +9,6 @@ class Ffmpeg < Formula
   option "with-chromaprint", "Enable the Chromaprint audio fingerprinting library"
   option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
   option "with-libssh", "Enable SFTP protocol via libssh"
-  option "with-libvidstab", "Enable vid.stab support for video stabilization"
   option "with-openh264", "Enable OpenH264 library"
   option "with-openssl", "Enable SSL support"
   option "with-srt", "Enable SRT library"
@@ -52,12 +51,12 @@ class Ffmpeg < Formula
   depends_on "librsvg"
   depends_on "tesseract"
   depends_on "opencore-amr"
+  depends_on "libvidstab"
 
   depends_on "chromaprint" => :optional
   depends_on "fdk-aac" => :optional
   depends_on "game-music-emu" => :optional
   depends_on "libssh" => :optional
-  depends_on "libvidstab" => :optional
   depends_on "libvmaf" => :optional
   depends_on "openh264" => :optional
   depends_on "openssl" => :optional
@@ -111,6 +110,7 @@ class Ffmpeg < Formula
       --enable-libmodplug
       --enable-librsvg
       --enable-libtesseract
+      --enable-libvidstab
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
@@ -120,7 +120,6 @@ class Ffmpeg < Formula
     args << "--enable-libsrt" if build.with? "srt"
     args << "--enable-libssh" if build.with? "libssh"
     args << "--enable-libtwolame" if build.with? "two-lame"
-    args << "--enable-libvidstab" if build.with? "libvidstab"
     args << "--enable-libvmaf" if build.with? "libvmaf"
     args << "--enable-libwavpack" if build.with? "wavpack"
     args << "--enable-opencl" if MacOS.version > :lion
