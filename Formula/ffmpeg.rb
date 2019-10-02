@@ -10,7 +10,6 @@ class Ffmpeg < Formula
   option "with-fdk-aac", "Enable the Fraunhofer FDK AAC library"
   option "with-libssh", "Enable SFTP protocol via libssh"
   option "with-openh264", "Enable OpenH264 library"
-  option "with-openssl", "Enable SSL support"
   option "with-srt", "Enable SRT library"
   option "with-libvmaf", "Enable libvmaf scoring library"
 
@@ -59,7 +58,7 @@ class Ffmpeg < Formula
   depends_on "libssh" => :optional
   depends_on "libvmaf" => :optional
   depends_on "openh264" => :optional
-  depends_on "openssl" => :optional
+  depends_on "openssl"
   depends_on "srt" => :optional
   depends_on "two-lame" => :optional
   depends_on "wavpack" => :optional
@@ -111,6 +110,13 @@ class Ffmpeg < Formula
       --enable-librsvg
       --enable-libtesseract
       --enable-libvidstab
+      --enable-gpl
+      --enable-libx264
+      --disable-ffserver
+      --enable-ffplay
+      --enable-encoder=h264_videotoolbox
+      --enable-decoder=h264_vda
+      --enable-encoder=h264_vaapi
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
@@ -131,10 +137,6 @@ class Ffmpeg < Formula
       args << "--disable-decoder=jpeg2000"
       args << "--extra-cflags=" + `pkg-config --cflags libopenjp2`.chomp
     end
-
-    # These librares are GPL-incompatible, and require ffmpeg be built with
-    # the "--enable-nonfree" flag, which produces unredistributable libraries
-    args << "--enable-nonfree" if build.with?("fdk-aac") || build.with?("openssl")
 
     system "./configure", *args
     system "make", "install"
