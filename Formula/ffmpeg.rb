@@ -52,7 +52,6 @@ class Ffmpeg < Formula
   depends_on "tesseract"
   depends_on "opencore-amr"
   depends_on "libvidstab"
-  depends_on "openssl"
 
   depends_on "chromaprint" => :optional
   depends_on "fdk-aac" => :optional
@@ -60,6 +59,7 @@ class Ffmpeg < Formula
   depends_on "libssh" => :optional
   depends_on "libvmaf" => :optional
   depends_on "openh264" => :optional
+  depends_on "openssl" => :optional
   depends_on "srt" => :optional
   depends_on "two-lame" => :optional
   depends_on "wavpack" => :optional
@@ -111,7 +111,6 @@ class Ffmpeg < Formula
       --enable-librsvg
       --enable-libtesseract
       --enable-libvidstab
-      --enable-openssl
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
@@ -124,6 +123,7 @@ class Ffmpeg < Formula
     args << "--enable-libvmaf" if build.with? "libvmaf"
     args << "--enable-libwavpack" if build.with? "wavpack"
     args << "--enable-opencl" if MacOS.version > :lion
+    args << "--enable-openssl" if build.with? "openssl"
     args << "--enable-videotoolbox" if MacOS.version >= :mountain_lion
 
     if build.with? "openjpeg"
@@ -134,7 +134,7 @@ class Ffmpeg < Formula
 
     # These librares are GPL-incompatible, and require ffmpeg be built with
     # the "--enable-nonfree" flag, which produces unredistributable libraries
-    #args << "--enable-nonfree" if build.with?("fdk-aac") || build.with?("openssl")
+    args << "--enable-nonfree" if build.with?("fdk-aac") || build.with?("openssl")
 
     system "./configure", *args
     system "make", "install"
