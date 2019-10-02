@@ -112,7 +112,6 @@ class Ffmpeg < Formula
       --enable-libvidstab
       --enable-gpl
       --enable-libx264
-      --disable-ffserver
       --enable-ffplay
       --enable-encoder=h264_videotoolbox
       --enable-decoder=h264_vda
