@@ -51,6 +51,7 @@ class Ffmpeg < Formula
   depends_on "tesseract"
   depends_on "opencore-amr"
   depends_on "libvidstab"
+  depends_on "openssl"
 
   depends_on "chromaprint" => :optional
   depends_on "fdk-aac" => :optional
@@ -58,7 +59,6 @@ class Ffmpeg < Formula
   depends_on "libssh" => :optional
   depends_on "libvmaf" => :optional
   depends_on "openh264" => :optional
-  depends_on "openssl"
   depends_on "srt" => :optional
   depends_on "two-lame" => :optional
   depends_on "wavpack" => :optional
@@ -110,13 +110,11 @@ class Ffmpeg < Formula
       --enable-librsvg
       --enable-libtesseract
       --enable-libvidstab
-      --enable-gpl
-      --enable-libx264
-      --enable-ffplay
       --enable-encoder=h264_videotoolbox
       --enable-decoder=h264_vda
       --enable-encoder=h264_vaapi
       --enable-nonfree
+      --enable-openssl
     ]
 
     args << "--enable-chromaprint" if build.with? "chromaprint"
