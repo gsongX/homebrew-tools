@@ -5,11 +5,11 @@ class Libf2c < Formula
   homepage 'http://www.netlib.org/f2c/'
   # netlib doesn't provide a versioned link for libf2c itself, so
   # we have to download the entire CLapack and extract it from there
-  url 'http://www.netlib.org/clapack/clapack-3.1.1.tgz'
-  sha256 'ca47ce8ea907aab6ed7bd01fa4e03a1d14723f99350d7581de0b2153248f1465'
+  url 'http://www.netlib.org/clapack/clapack.tgz'
+  sha256 '6dc4c382164beec8aaed8fd2acc36ad24232c406eda6db462bd4c41d5e455fac'
   # encode 0.0.YY.MM.DD as version number when we only have release
   # dates; this is one of the few ways to encode a date into Mach-O
-  version '0.0.08.01.07'
+  version '0.0.25.05.09'
 
   def install
     # we need C compiler
