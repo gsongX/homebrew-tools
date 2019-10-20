@@ -21,9 +21,7 @@ class F2c < Formula
     bin.install 'f2c'
     man1.install "f2c.1t" => "f2c.1"
     resource("lib").stage do
-      cp 'makefile.u', 'makefile'
-      make "f2c.h"
-      system "make"
+      system "make", "-f", "makefile.u", "f2c.h"
       include.install("f2c.h")
       lib.install("libf2c.a")
     end
