@@ -14,7 +14,6 @@ class PyqtWebkit < Formula
   # to the CMake arguments will fix the problem.
 
   depends_on "python"
-  depends_on "python@2"
   depends_on "qt"
   depends_on "sip"
   depends_on "pyqt"
@@ -31,7 +30,7 @@ class PyqtWebkit < Formula
     EOS
     end
 
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
+    ["#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       args = ["--confirm-license",
               "--bindir=#{bin}",
@@ -39,9 +38,9 @@ class PyqtWebkit < Formula
               "--stubsdir=#{lib}/python#{version}/site-packages/PyQt5",
               "--sipdir=#{share}/sip/Qt5",
               # sip.h could not be found automatically
-              "--sip-incdir=#{Formula["sip@4.19"].opt_include}",
+              "--sip-incdir=#{Formula["sip"].opt_include}",
               "--qmake=#{Formula["qt"].bin}/qmake",
-              "--sip=#{Formula["sip@4.19"].opt_bin}/sip",
+              "--sip=#{Formula["sip"].opt_bin}/sip",
               # Force deployment target to avoid libc++ issues
               "QMAKE_MACOSX_DEPLOYMENT_TARGET=#{MacOS.version}",
               "--enable=QtWebKit",
@@ -73,7 +72,7 @@ class PyqtWebkit < Formula
   end
 
   test do
-    ["#{Formula["python@2"].opt_bin}/python2", "#{Formula["python"].opt_bin}/python3"].each do |python|
+    ["#{Formula["python"].opt_bin}/python3"].each do |python|
       version = Language::Python.major_minor_version python
       ENV["PYTHONPATH"] = lib/"python#{version}/site-packages"
       system python, "-c", '"import PyQt5.QtWebKit"'
