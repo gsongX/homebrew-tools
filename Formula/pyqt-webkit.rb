@@ -16,8 +16,8 @@ class PyqtWebkit < Formula
   depends_on "python"
   depends_on "python@2"
   depends_on "qt"
-  depends_on "sip@4.19"
-  depends_on "pyqt@5.12"
+  depends_on "sip"
+  depends_on "pyqt"
   depends_on "qt5-webkit"
 
   def install
