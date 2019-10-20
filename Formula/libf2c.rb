@@ -50,7 +50,7 @@ class Libf2c < Formula
 
       # pkg-config file; this is small enough to put inline here
       File::open("#{name}.pc", 'w') do |f|
-        f << <<-EOF.undent
+        f << <<-EOF
           prefix=#{HOMEBREW_PREFIX}
           exec_prefix=${prefix}
           libdir=${exec_prefix}/lib
@@ -85,7 +85,7 @@ class Libf2c < Formula
     # library; we don't install the compiler itself)
     # this is a classic "Hello, World!" program translated from Fortran
     File::open("hello.c", "w") do |f|
-      f << <<-EOF.undent
+      f << <<-EOF
         #include "f2c.h"
 
         integer s_wsle(cilist *);
