@@ -21,13 +21,10 @@ class F2c < Formula
     bin.install 'f2c'
     man1.install "f2c.1t" => "f2c.1"
     resource("lib").stage do
-      system "unzip", "libf2c.zip", "-d", "libf2c"
-      cd "libf2c" do
-        system "make", "-f", "makefile.u", "f2c.h"
-        include.install "f2c.h"
-        system "make", "-f", "makefile.u"
-        lib.install "libf2c.a"
-      end
+      system "make", "-f", "makefile.u", "f2c.h"
+      include.install "f2c.h"
+      system "make", "-f", "makefile.u"
+      lib.install "libf2c.a"
     end
     resource("manual").stage do
       doc.install 'f2c.pdf'
