@@ -1,43 +1,35 @@
 class F2c < Formula
+  desc "Fortran-to-C Converter"
   homepage "http://www.netlib.org/f2c/"
-  head "http://netlib.sandia.gov/cgi-bin/netlib/netlibfiles.tar?filename=netlib/f2c"
+  url "http://www.netlib.org/f2c/src.tgz"
+  version "201601021"
+  sha256 "791836946719aca39a5fb0f13db0b891059af220595fd516b509c1c3eaaa3d5e"
+
+  resource "lib" do
+    url "http://www.netlib.org/f2c/libf2c.zip"
+    sha256 "ca404070e9ce0a9aaa6a71fc7d5489d014ade952c5d6de7efb88de8e24f2e8e0"
+  end
+
+  resource "manual" do
+    url "http://www.netlib.org/f2c/f2c.pdf"
+    sha256 "816cdbfd20ce3695be0eb976648714b6fe496785bb8026c6b8911712764d57c7"
+  end
 
   def install
-    system "unzip", "libf2c.zip", "-d", "libf2c"
-    # f2c header and libf2c.a
-    cd "libf2c" do
-      system "make", "-f", "makefile.u", "f2c.h"
-      include.install "f2c.h"
-
-      system "make", "-f", "makefile.u"
-      lib.install "libf2c.a"
+    cp 'makefile.u', 'makefile'
+    system "make"
+    bin.install 'f2c'
+    man1.install "f2c.1t" => "f2c.1"
+    resource("lib").stage do
+      cp 'makefile.u', 'makefile'
+      make "f2c.h"
+      system "make"
+      include.install("f2c.h")
+      lib.install("libf2c.a")
     end
-
-    # f2c executable
-    cd "src" do
-      system "make", "-f", "makefile.u", "f2c"
-      bin.install "f2c"
+    resource("manual").stage do
+      doc.install 'f2c.pdf'
     end
-
-    # man pages
-    man1.install "f2c.1t"
   end
 
-  test do
-    # check if executable doesn't error out
-    system "#{bin}/f2c", "--version"
-
-    # hello world test
-    (testpath/"test.f").write <<-EOS.undent
-      C comment line
-            program hello
-            print*, 'hello world'
-            stop
-            end
-    EOS
-    system "#{bin}/f2c", "test.f"
-    assert (testpath/"test.c").exist?
-    system "cc", "-O", "-o", "test", "test.c", "-lf2c"
-    assert_equal " hello world\n", shell_output("#{testpath}/test")
-  end
 end
