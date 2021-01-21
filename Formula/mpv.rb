@@ -38,7 +38,6 @@ class Mpv < Formula
   depends_on "rubberband" => :optional
   depends_on "uchardet" => :optional
   depends_on "vapoursynth" => :optional
-  depends_on :x11 => :optional
 
   def install
     # LANG is unset by default on macOS and causes issues when calling getlocale
