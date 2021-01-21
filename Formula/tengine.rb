@@ -151,6 +151,7 @@ class Tengine < Formula
     if rack.subdirs.any? { |d| d.join("sbin").directory? }
       sbin.install_symlink bin/"nginx"
     end
+    bin.install_symlink "#{sbin}/dso_tool" => "dso_tool"
   end
 
   test do
