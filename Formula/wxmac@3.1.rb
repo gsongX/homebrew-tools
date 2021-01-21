@@ -1,10 +1,18 @@
 class WxmacAT31 < Formula
-  desc "Cross-platform C++ GUI toolkit (wxWidgets for macOS)"
+  desc     "Cross-platform C++ GUI toolkit (wxWidgets for macOS)"
   homepage "https://www.wxwidgets.org"
-  url "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.tar.bz2"
-  sha256 "3ca3a19a14b407d0cdda507a7930c2e84ae1c8e74f946e0144d2fa7d881f1a94"
+  url      "https://github.com/wxWidgets/wxWidgets/releases/download/v3.1.4/wxWidgets-3.1.4.tar.bz2"
+  sha256   "3ca3a19a14b407d0cdda507a7930c2e84ae1c8e74f946e0144d2fa7d881f1a94"
+  license  "wxWindows"
   revision 1
-  head "https://github.com/wxWidgets/wxWidgets.git"
+  head     "https://github.com/wxWidgets/wxWidgets.git"
+
+  livecheck do
+    url "https://github.com/wxWidgets/wxWidgets/releases/latest"
+    regex(%r{href=.*?/tag/v?(\d+(?:\.\d+)+)["' >]}i)
+  end
+
+  option "with-enable-abort", "apply patch patch-make-public-enable-abort"
 
   option "with-stl", "use standard C++ classes for everything"
   option "with-static", "build static libraries"
@@ -12,6 +20,13 @@ class WxmacAT31 < Formula
   depends_on "jpeg" unless build.with? "static"
   depends_on "libpng" unless build.with? "static"
   depends_on "libtiff" unless build.with? "static"
+
+  if build.with?("enable-abort")
+    patch do
+      url "https://github.com/cdalvaro/homebrew-tap/raw/master/formula-patches/wxmac/patch-make-public-enable-abort.diff"
+      sha256 "50c4fd7618cc6015dafc55a89d96f5330dc739215a1c55f31c4d34181b5e5d18"
+    end
+  end
 
   # Fixes ld: warning: direct access in function ... to global weak symbol ...
   patch :DATA
