@@ -222,27 +222,27 @@ class Qt5Webkit < Formula
 end
 
 __END__
---- a/Source/WTF/wtf/spi/darwin/XPCSPI.h 2017-06-17 13:46:54.000000000 +0300
-+++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h 2018-09-08 23:41:06.397523110 +0300
-@@ -89,10 +89,6 @@
+--- a/Source/WTF/wtf/spi/darwin/XPCSPI.h  2021-01-21 17:40:31.000000000 +0700
++++ b/Source/WTF/wtf/spi/darwin/XPCSPI.h  2021-01-21 17:39:03.000000000 +0700
+@@ -97,6 +97,10 @@
  EXTERN_C const struct _xpc_type_s _xpc_type_string;
-
+ 
  EXTERN_C xpc_object_t xpc_array_create(const xpc_object_t*, size_t count);
--#if COMPILER_SUPPORTS(BLOCKS)
--EXTERN_C bool xpc_array_apply(xpc_object_t, xpc_array_applier_t);
--EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, xpc_dictionary_applier_t applier);
--#endif
++#if COMPILER_SUPPORTS(BLOCKS)
++EXTERN_C bool xpc_array_apply(xpc_object_t, XPC_NOESCAPE xpc_array_applier_t);
++EXTERN_C bool xpc_dictionary_apply(xpc_object_t xdict, XPC_NOESCAPE xpc_dictionary_applier_t applier);
++#endif
  EXTERN_C size_t xpc_array_get_count(xpc_object_t);
  EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
  EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
-
---- a/Tools/qmake/projects/run_cmake.pro 2017-06-17 13:46:54.000000000 +0300
-+++ b/Tools/qmake/projects/run_cmake.pro 2018-09-08 23:41:06.397523110 +0300
-@@ -22,6 +22,7 @@
+diff -uNr a/Tools/qmake/projects/run_cmake.pro b/Tools/qmake/projects/run_cmake.pro
+--- a/Tools/qmake/projects/run_cmake.pro  2021-01-21 17:41:32.000000000 +0700
++++ b/Tools/qmake/projects/run_cmake.pro  2021-01-21 17:39:01.000000000 +0700
+@@ -22,7 +22,6 @@
          PORT=Qt \
          CMAKE_BUILD_TYPE=$$configuration \
          CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
-+        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.212
+-        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.212 \
          USE_LIBHYPHEN=OFF
-
+ 
      !isEmpty(_QMAKE_SUPER_CACHE_) {
