@@ -2,8 +2,8 @@ class F2c < Formula
   desc "Fortran-to-C Converter"
   homepage "http://www.netlib.org/f2c/"
   url "http://www.netlib.org/f2c/src.tgz"
-  version "201601021"
-  sha256 "c502585d9646cdc4955779154fe2e19c20285e2a85449b2f9eed644d905e4942"
+  version "20200916"
+  sha256 "d4847456aa91c74e5e61e2097780ca6ac3b20869fae8864bfa8dcc66f6721d35"
 
   resource "lib" do
     url "http://www.netlib.org/f2c/libf2c.zip"

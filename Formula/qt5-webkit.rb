@@ -1,11 +1,16 @@
 class Qt5Webkit < Formula
+  # Notes:
+  # 1. We copy this formumae from https://github.com/markwu/homebrew-personal/blob/master/Formula/qt5-webkit.rb,
+  #    and remove unneccesary libraries dependency.
   desc "Classes for a WebKit2 based implementation and a new QML API"
   homepage "https://www.qt.io/developers"
-  url "https://github.com/qt/qtwebkit/archive/72cfbd7664f21fcc0e62b869a6b01bf73eb5e7da.tar.gz"
-  sha256 "2e393e7429387437cbfef56ec839329663e9b136ea68997d1e1cdd2f4d9d3ae0"
-  version "5.12.3"
+  url "https://github.com/qt/qtwebkit.git",
+    :branch => "5.212",
+    :commit => "ac8ebc6c3a56064f88f5506e5e3783ab7bee2456"
+  version "5.212"
 
-  revision 1
+  # if it is changed this should be applied in CMAKE_INSTALL_PREFIX (see patch)
+  # in the same way for "version"
 
   # from the developer: "https://github.com/annulen/webkit.git"
   head "https://github.com/qt/qtwebkit.git"
@@ -17,45 +22,23 @@ class Qt5Webkit < Formula
   keg_only "because Qt5 is keg-only"
 
   depends_on "cmake" => :build
-  depends_on "ninja" => [:build, :recommended]
-  depends_on "pkg-config" => :build
-
   depends_on :xcode => :build
-
-  # depends_on "libjpeg" # Qt < 5.10
   depends_on "libjpeg-turbo"
   depends_on "libpng"
   depends_on "openssl"
   depends_on "qt"
   depends_on "webp"
-  #depends_on "zlib"
-
-  def cmake_args
-    args = %W[
-      -DCMAKE_INSTALL_PREFIX=#{prefix}
-      -DCMAKE_BUILD_TYPE=Release
-      -DCMAKE_FIND_FRAMEWORK=LAST
-      -DCMAKE_VERBOSE_MAKEFILE=ON
-      -Wno-dev
-    ]
-    args
-  end
+  depends_on "zlib"
 
   def install
-    args = cmake_args
-    args << "-DPORT=Qt"
-    args << "-DENABLE_TOOLS=OFF"
-    args << "-DCMAKE_MACOSX_RPATH=OFF"
-    args << "-DEGPF_SET_RPATH=OFF"
-    args << "-DCMAKE_SKIP_RPATH=ON"
-    args << "-DCMAKE_SKIP_INSTALL_RPATH=ON"
+    # on Mavericks we want to target libc++, this requires a macx-clang flag
+    spec = (ENV.compiler == :clang && MacOS.version >= :mavericks) ? "macx-clang" : "macx-g++"
+    args = %W[-config release -spec #{spec}]
 
-    # Fuck up rpath
-    # inreplace "Source/cmake/OptionQt.cmake", "RPATH\ ON", "RPATH\ OFF"
     mkdir "build" do
-      system "cmake", "-G", build.with?("ninja") ? "Ninja" : "Unix Makefile", *args, ".."
-      system "cmake", "--build", ".", "--target", "all", "--", "-j", Hardware::CPU.cores
-      system "cmake", "--build", ".", "--target", "install", "--", "-j", Hardware::CPU.cores
+      system "#{Formula["qt"].opt_bin}/qmake", "../WebKit.pro", *args
+      system "make"
+      system "make", "install"
     end
 
     # rename the .so files
@@ -120,7 +103,6 @@ class Qt5Webkit < Formula
                                     "#{lib}/QtWebKit.framework/Versions/5/QtWebKit")
   end
 
-  # Failed to connect to localhost port 80: Connection refused
   test do
     (testpath/"hello.pro").write <<~EOS
       QT        += core webkitwidgets
@@ -134,51 +116,51 @@ class Qt5Webkit < Formula
       include(#{prefix}/mkspecs/modules/qt_lib_webkit.pri)
       include(#{prefix}/mkspecs/modules/qt_lib_webkitwidgets.pri)
     EOS
-    
+
     (testpath/"client.h").write <<~EOS
     #ifndef CLIENT_H
     #define CLIENT_H
     #include <QWebPage>
     #include <QString>
-    
+
     class Client : public QObject
     {
       Q_OBJECT
-    
+
     public:
       Client(const QString &url, QObject *parent = 0);
-    
+
     private Q_SLOTS:
       void loadUrl();
       void output(bool ok);
-    
+
     private:
       QWebPage page;
       QString url;
-    
+
     };
     #endif // CLIENT_H
     EOS
-    
+
     (testpath/"client.cpp").write <<~EOS
     #include "client.h"
     #include <QCoreApplication>
     #include <QDebug>
     #include <QWebFrame>
     #include <QUrl>
-    
+
     Client::Client(const QString &myurl, QObject *parent)
       : QObject(parent)
       , url(myurl)
     {
     }
-    
+
     void Client::loadUrl()
     {
       page.mainFrame()->load(QUrl(url));
       connect(&page, SIGNAL(loadFinished(bool)), this, SLOT(output(bool)));
     }
-    
+
     void Client::output(bool ok)
     {
       if (ok){
@@ -190,14 +172,14 @@ class Qt5Webkit < Formula
       }
     }
     EOS
-    
+
     (testpath/"main.cpp").write <<~EOS
       #include <QApplication>
       #include <QDebug>
       #include <QTimer>
       #include <QWebView>
       #include "client.h"
-    
+
       int main(int argc, char *argv[])
       {
         QApplication app(argc, argv);
@@ -207,7 +189,7 @@ class Qt5Webkit < Formula
         return app.exec();
       }
     EOS
-    
+
     (testpath/"test.html").write <<~EOS
       <!DOCTYPE html>
       <html lang="en">
@@ -215,7 +197,7 @@ class Qt5Webkit < Formula
       <body>Body content</body>
       </html>
     EOS
-    
+
     cd testpath do
       system Formula["qt5"].bin/"qmake", "hello.pro"
       system "make"
@@ -223,7 +205,7 @@ class Qt5Webkit < Formula
       assert_predicate testpath/"moc_client.o", :exist?
       assert_predicate testpath/"main.o", :exist?
       assert_predicate testpath/"hello", :exist?
-    
+
       # test that we can actually serve the page
       pid = fork do
         exec testpath/"hello"
@@ -237,9 +219,6 @@ class Qt5Webkit < Formula
       end
     end
   end
-  # could be used:
-  # (testpath/"CMakeLists.txt").write("find_package(Qt5 CONFIG COMPONENTS WebKit WebKitWidgets REQUIRED)")
-  # system "cmake", ".", "-Wno-dev"
 end
 
 __END__
@@ -256,3 +235,14 @@ __END__
  EXTERN_C size_t xpc_array_get_count(xpc_object_t);
  EXTERN_C const char* xpc_array_get_string(xpc_object_t, size_t index);
  EXTERN_C void xpc_array_set_string(xpc_object_t, size_t index, const char* string);
+
+--- a/Tools/qmake/projects/run_cmake.pro 2017-06-17 13:46:54.000000000 +0300
++++ b/Tools/qmake/projects/run_cmake.pro 2018-09-08 23:41:06.397523110 +0300
+@@ -22,6 +22,7 @@
+         PORT=Qt \
+         CMAKE_BUILD_TYPE=$$configuration \
+         CMAKE_TOOLCHAIN_FILE=$$toolchain_file \
++        CMAKE_INSTALL_PREFIX=/usr/local/Cellar/qt5-webkit/5.212
+         USE_LIBHYPHEN=OFF
+
+     !isEmpty(_QMAKE_SUPER_CACHE_) {
