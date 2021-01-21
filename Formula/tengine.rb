@@ -1,7 +1,7 @@
 class Tengine < Formula
   homepage "http://tengine.taobao.org"
-  url "http://tengine.taobao.org/download/tengine-2.2.3.tar.gz"
-  sha256 "8268d9637640e4bffcfa0817f9f16c5aa8a084104d9531e885911e0cb4ab2274"
+  url "https://tengine.taobao.org/download/tengine-2.3.2.tar.gz"
+  sha256 "a65998a35739a59f8a16ec4c6090a59e569ba5a1a3f68fecad952057c1a18fea"
   head "https://github.com/alibaba/tengine.git"
 
   def self.core_modules
@@ -9,7 +9,6 @@ class Tengine < Formula
       ["jemalloc",         nil,                        "Optimization of jemalloc memory management"],
       ["passenger",        nil,                        "Compile with support for Phusion Passenger module"],
       ["webdav",           "http_dav_module",          "Compile with support for WebDAV module"],
-      ["spdy",             "http_spdy_module",         "Compile with support for SPDY module"],
       ["http2",            "http_v2_module",           "Compile with support for HTTP2 module"],
       ["gunzip",           "http_gunzip_module",       "Compile with support for gunzip module"],
       ["secure-link",      "http_secure_link_module",  "Compile with support for secure link module"],
@@ -43,8 +42,8 @@ class Tengine < Formula
   depends_on "pcre"
   depends_on "gd" if build.with? "image-filter"
 
-  conflicts_with 'nginx',
-    :because => "nginx install the same binaries."
+  conflicts_with 'nginx', 'denji/nginx/nginx-full',
+    :because => "nginx, denji/nginx/nginx-full install the same binaries."
 
   self.core_modules.each do |arr|
     option "with-#{arr[0]}", arr[2]
@@ -77,7 +76,6 @@ class Tengine < Formula
     args = ["--prefix=#{prefix}",
             "--with-http_ssl_module",
             "--with-pcre",
-            "--with-ipv6",
             "--sbin-path=#{bin}/nginx",
             "--with-cc-opt=#{cc_opt}",
             "--with-ld-opt=#{ld_opt}",
@@ -153,8 +151,6 @@ class Tengine < Formula
     if rack.subdirs.any? { |d| d.join("sbin").directory? }
       sbin.install_symlink bin/"nginx"
     end
-
-    bin.install_symlink "#{sbin}/dso_tool" => "dso_tool"
   end
 
   test do
@@ -177,11 +173,9 @@ class Tengine < Formula
     tengine can run without sudo.
 
     - Tips -
-    To have launchd start nginx now and restart at login:
-        brew services start tengine
     Run port 80:
-     $ sudo chown root:wheel #{sbin}/nginx
-     $ sudo chmod u+s #{sbin}/nginx
+     $ sudo chown root:wheel #{bin}/nginx
+     $ sudo chmod u+s #{bin}/nginx
     Reload config:
      $ nginx -s reload
     Reopen Logfile:
