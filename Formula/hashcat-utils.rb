@@ -1,40 +1,21 @@
-# Documentation: https://github.com/Homebrew/homebrew/blob/master/share/doc/homebrew/Formula-Cookbook.md
-#                /usr/local/Library/Contributions/example-formula.rb
-# PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
+require 'formula'
 
 class HashcatUtils < Formula
-  homepage ""
-  head "git://git.kali.org/packages/hashcat-utils.git"
-  version "utils"
-  
+  homepage "http://hashcat.net/hashcat/"
+  url "https://github.com/hashcat/hashcat-utils/releases/download/v1.8/hashcat-utils-1.8.7z"
+  sha256 "37686f536ee5be3ad39fa25127f394d0accf41c63170482f87f39d2f9fcd00f5"
+  head "https://github.com/hashcat/hashcat-utils.git"
 
-  # depends_on "cmake" => :build
-  depends_on :x11 # if your formula requires any X11/XQuartz components
+  depends_on 'p7zip' => :build
 
   def install
-    cd "src" do
-      # ENV.deparallelize  # if your formula fails when building in parallel
-
-      # Remove unrecognized options if warned by configure
-      #system "./configure", "--disable-debug",
-      #                      "--disable-dependency-tracking",
-      #                      "--disable-silent-rules",
-      #                      "--prefix=#{prefix}"
-      # system "cmake", ".", *std_cmake_args
-      system "make" # if this fails, try separate make/make install steps
+    cd "hashcat-utils" do
+      #inreplace "Makefile", /\/opt\/hashcat-toolchain\/linux32\/bin\/i686-hashcat-linux-gnu-gcc/, ENV.cc
+      #inreplace "Makefile", /\$\(CFLAGS\) -m32/, '$(CFLAGS)'
+      #system "make", "clean"
+      #system "make", "posix"
+      bin.install Dir["bin/*.bin"]
+      bin.install Dir["bin/*.pl"]
     end
-  end
-
-  test do
-    # `test do` will create, run in and delete a temporary directory.
-    #
-    # This test will fail and we won't accept that! It's enough to just replace
-    # "false" with the main program this formula installs, but it'd be nice if you
-    # were more thorough. Run the test with `brew test hashcat-utils`. Options passed
-    # to `brew install` such as `--HEAD` also need to be provided to `brew test`.
-    #
-    # The installed folder is not in the path, so use the entire path to any
-    # executables being tested: `system "#{bin}/program", "do", "something"`.
-    system "false"
   end
 end
